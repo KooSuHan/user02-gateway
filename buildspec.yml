@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    _PROJECT_NAME: "user05-mypage"
+    _PROJECT_NAME: "user02-gateway"
 
 phases:
   install:
@@ -41,38 +41,38 @@ phases:
           apiVersion: v1
           kind: Service
           metadata:
-            name: mypage
-            namespace: team05
+            name: gateway
+            namespace: user02
             labels:
-              app: mypage
+              app: gateway
           spec:
             ports:
               - port: 8080
                 targetPort: 8080
             selector:
-              app: mypage
+              app: gateway
           EOF
       - |
           cat  <<EOF | kubectl apply -f -
           apiVersion: apps/v1
           kind: Deployment
           metadata:
-            name: mypage
-            namespace: team05
+            name: gateway
+            namespace: user02
             labels:
-              app: mypage
+              app: gateway
           spec:
             replicas: 1
             selector:
               matchLabels:
-                app: mypage
+                app: gateway
             template:
               metadata:
                 labels:
-                  app: mypage
+                  app: gateway
               spec:
                 containers:
-                  - name: mypage
+                  - name: gateway
                     image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
                     ports:
                       - containerPort: 8080
